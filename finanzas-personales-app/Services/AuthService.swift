@@ -40,6 +40,8 @@ class AuthService: ObservableObject {
                 if let session = session {
                     isAuthenticated = true
                     currentUser = session.user
+                    print("🔐 DEBUG: Usuario autenticado con ID: \(session.user.id)")
+                    print("🔐 DEBUG: Email del usuario: \(session.user.email ?? "No email")")
                 }
             case .signedOut:
                 isAuthenticated = false

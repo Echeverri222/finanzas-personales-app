@@ -145,14 +145,20 @@ class MovementViewModel: ObservableObject {
         }
         
         do {
+            print("📊 DEBUG: Cargando datos para usuario ID: \(userId)")
+            
             async let movementsTask = databaseService.fetchMovements(for: userId)
             async let typesTask = databaseService.fetchMovementTypes(for: userId)
             
             let (fetchedMovements, fetchedTypes) = try await (movementsTask, typesTask)
             
+            print("📊 DEBUG: Movimientos encontrados: \(fetchedMovements.count)")
+            print("📊 DEBUG: Tipos encontrados: \(fetchedTypes.count)")
+            
             movements = fetchedMovements
             movementTypes = fetchedTypes
         } catch {
+            print("❌ DEBUG: Error cargando datos: \(error)")
             errorMessage = "Error loading data: \(error.localizedDescription)"
         }
         
