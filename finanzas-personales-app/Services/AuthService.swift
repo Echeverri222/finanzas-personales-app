@@ -137,7 +137,7 @@ class AuthService: ObservableObject {
     }
     
     var isDemoMode: Bool {
-        return isAuthenticated && currentUser == nil
+        return isAuthenticated && (currentUser == nil)
     }
     
     func signOut() async {

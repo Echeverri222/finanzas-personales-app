@@ -33,9 +33,22 @@
 		16A6E58E2E6380E000A5F086 /* finanzas-personales-appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "finanzas-personales-appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1692E5812E665EAB00E84AB6 /* Exceptions for "finanzas-personales-app" folder in "finanzas-personales-app" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 16A6E5762E6380DD00A5F086 /* finanzas-personales-app */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		16A6E5792E6380DD00A5F086 /* finanzas-personales-app */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1692E5812E665EAB00E84AB6 /* Exceptions for "finanzas-personales-app" folder in "finanzas-personales-app" target */,
+			);
 			path = "finanzas-personales-app";
 			sourceTree = "<group>";
 		};
@@ -418,6 +431,7 @@
 				DEVELOPMENT_TEAM = B3Y6Z2S57D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "finanzas-personales-app/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -446,6 +460,7 @@
 				DEVELOPMENT_TEAM = B3Y6Z2S57D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "finanzas-personales-app/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
