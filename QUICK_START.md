@@ -7,7 +7,8 @@
 **☑️ 1. GOOGLE CLOUD CONSOLE** (5 mins)
 - [ ] Ve a [Google Cloud Console](https://console.cloud.google.com/)
 - [ ] Crea proyecto: "Finanzas Personales App"
-- [ ] Habilita: Google+ API, Google Sign-In API
+- [ ] ⚡ SALTA "Habilitar APIs" - No necesitas habilitar APIs específicas
+- [ ] Ve directo a: APIs & Services → Credentials
 - [ ] Crea OAuth 2.0 Client ID (iOS): Bundle ID = `com.tuusuario.finanzas-personales-app`
 - [ ] Crea OAuth 2.0 Client ID (Web): Para Supabase
 - [ ] Descarga `GoogleService-Info.plist`

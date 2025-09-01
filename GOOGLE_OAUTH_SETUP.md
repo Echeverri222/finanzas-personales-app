@@ -11,12 +11,18 @@
    - **Nombre**: `Finanzas Personales App`
    - **ID**: puede ser generado automáticamente
 
-#### **B. Habilitar APIs:**
+#### **B. Habilitar APIs (OPCIONAL):**
+**🎯 IMPORTANTE:** Para OAuth básico, NO necesitas habilitar APIs específicas. 
+Solo crear las credenciales OAuth es suficiente.
+
+**Si quieres habilitarlas (opcional):**
 1. Ve a **"APIs & Services" > "Library"**
-2. Busca y habilita:
-   - **Google+ API**
-   - **Google Sign-In API** 
-   - **Google Identity Services**
+2. Busca y habilita (nombres reales):
+   - **Google+ API** (deprecated pero a veces útil)
+   - **People API** (para información de perfil)
+   - **Gmail API** (solo si necesitas acceso a Gmail)
+
+**⚡ PUEDES SALTARTE ESTE PASO** - Oauth funciona sin habilitar APIs adicionales.
 
 #### **C. Crear Credenciales OAuth 2.0:**
 
