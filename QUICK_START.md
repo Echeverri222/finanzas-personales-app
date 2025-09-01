@@ -9,7 +9,7 @@
 - [ ] Crea proyecto: "Finanzas Personales App"
 - [ ] ⚡ SALTA "Habilitar APIs" - No necesitas habilitar APIs específicas
 - [ ] Ve directo a: APIs & Services → Credentials
-- [ ] Crea OAuth 2.0 Client ID (iOS): Bundle ID = `com.tuusuario.finanzas-personales-app`
+- [ ] Crea OAuth 2.0 Client ID (iOS): Bundle ID = `com.FinAL.finanzas-personales-app`
 - [ ] Crea OAuth 2.0 Client ID (Web): Para Supabase
 - [ ] Descarga `GoogleService-Info.plist`
 
@@ -51,7 +51,7 @@ finanzas-personales-app://auth/callback
 
 **Bundle ID (usar consistentemente):**
 ```
-com.tuusuario.finanzas-personales-app
+com.FinAL.finanzas-personales-app
 ```
 
 ---

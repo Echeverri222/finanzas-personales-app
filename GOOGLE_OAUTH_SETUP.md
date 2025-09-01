@@ -32,7 +32,7 @@ Solo crear las credenciales OAuth es suficiente.
 3. Selecciona **"iOS"** como Application type
 4. Configura:
    - **Name**: `Finanzas Personales iOS`
-   - **Bundle ID**: `com.tuusuario.finanzas-personales-app`
+   - **Bundle ID**: `com.FinAL.finanzas-personales-app`
    
    **⚠️ IMPORTANTE:** El Bundle ID debe coincidir exactamente con el de tu proyecto Xcode.
 
