@@ -10,6 +10,7 @@
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>finanzas-personales-app</string>
+                <string>com.googleusercontent.apps.849478111086-n6gnvkleq4dgkl21vlq6mmoq24hj19p6</string>
             </array>
         </dict>
     </array>
