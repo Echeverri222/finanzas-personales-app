@@ -144,7 +144,7 @@ struct AddMovementView: View {
             return
         }
         
-        guard let userId = authService.currentUser?.id else {
+        guard let userProfile = authService.userProfile else {
             errorMessage = "Error: Usuario no autenticado"
             isLoading = false
             return
@@ -156,7 +156,7 @@ struct AddMovementView: View {
             fecha: date,
             descripcion: description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : description.trimmingCharacters(in: .whitespacesAndNewlines),
             idTipoMovimiento: typeId,
-            usuarioId: userId.uuidString
+            usuarioId: String(userProfile.id)
         )
         
         Task {
@@ -278,7 +278,7 @@ struct EditMovementView: View {
     }
     
     private func updateMovement() {
-        guard let userId = authService.currentUser?.id,
+        guard let userProfile = authService.userProfile,
               let selectedType = selectedType,
               let typeId = selectedType.id,
               let amountValue = Double(amount) else {
@@ -297,7 +297,7 @@ struct EditMovementView: View {
             fecha: date,
             descripcion: description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : description.trimmingCharacters(in: .whitespacesAndNewlines),
             idTipoMovimiento: typeId,
-            usuarioId: userId.uuidString,
+            usuarioId: String(userProfile.id),
             createdAt: movement.createdAt
         )
         

@@ -55,8 +55,8 @@ struct MovementsView: View {
             .refreshable {
                 if authService.isDemoMode {
                     await movementViewModel.loadData(isDemoMode: true)
-                } else if let userId = authService.currentUser?.id {
-                    await movementViewModel.loadData(userId: userId.uuidString)
+                } else if let userProfile = authService.userProfile {
+                    await movementViewModel.loadData(userId: String(userProfile.id))
                 }
             }
         }
@@ -206,10 +206,10 @@ struct MovementsView: View {
             return
         }
         
-        guard let userId = authService.currentUser?.id else { return }
+        guard let userProfile = authService.userProfile else { return }
         
         Task {
-            await movementViewModel.deleteMovement(movement, userId: userId.uuidString)
+            await movementViewModel.deleteMovement(movement, userId: String(userProfile.id))
         }
     }
     

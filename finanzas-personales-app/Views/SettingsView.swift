@@ -186,8 +186,8 @@ struct SettingsView: View {
         Task {
             if authService.isDemoMode {
                 await movementViewModel.loadData(isDemoMode: true)
-            } else if let userId = authService.currentUser?.id {
-                await movementViewModel.loadData(userId: userId.uuidString)
+            } else if let userProfile = authService.userProfile {
+                await movementViewModel.loadData(userId: String(userProfile.id))
             }
         }
     }

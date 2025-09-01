@@ -147,8 +147,15 @@ class MovementViewModel: ObservableObject {
         do {
             print("📊 DEBUG: Cargando datos para usuario ID: \(userId)")
             
-            async let movementsTask = databaseService.fetchMovements(for: userId)
-            async let typesTask = databaseService.fetchMovementTypes(for: userId)
+            // Convert String to Int for database queries (usuarios.id is Int)
+            guard let userIdInt = Int(userId) else {
+                errorMessage = "ID de usuario inválido"
+                loading = false
+                return
+            }
+            
+            async let movementsTask = databaseService.fetchMovements(for: userIdInt)
+            async let typesTask = databaseService.fetchMovementTypes(for: userIdInt)
             
             let (fetchedMovements, fetchedTypes) = try await (movementsTask, typesTask)
             

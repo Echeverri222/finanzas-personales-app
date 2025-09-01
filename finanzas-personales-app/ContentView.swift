@@ -20,9 +20,9 @@ struct ContentView: View {
                         if authService.isDemoMode {
                             print("🎯 DEBUG: Cargando en modo demo")
                             await movementViewModel.loadData(isDemoMode: true)
-                        } else if let userId = authService.currentUser?.id {
-                            print("🎯 DEBUG: Cargando datos para usuario real: \(userId.uuidString)")
-                            await movementViewModel.loadData(userId: userId.uuidString)
+                        } else if let userProfile = authService.userProfile {
+                            print("🎯 DEBUG: Cargando datos para usuario DB ID: \(userProfile.id)")
+                            await movementViewModel.loadData(userId: String(userProfile.id))
                         } else {
                             print("❌ DEBUG: No hay usuario disponible para cargar datos")
                         }
