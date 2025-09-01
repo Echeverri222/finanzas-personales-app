@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		16A6E5C32E6386D600A5F086 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 16A6E5C22E6386D600A5F086 /* Supabase */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		16A6E5852E6380E000A5F086 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16A6E5C32E6386D600A5F086 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 				16A6E5792E6380DD00A5F086 /* finanzas-personales-app */,
 				16A6E5872E6380E000A5F086 /* finanzas-personales-appTests */,
 				16A6E5912E6380E000A5F086 /* finanzas-personales-appUITests */,
+				16A6E5C12E6386D600A5F086 /* Frameworks */,
 				16A6E5782E6380DD00A5F086 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +96,13 @@
 				16A6E58E2E6380E000A5F086 /* finanzas-personales-appUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		16A6E5C12E6386D600A5F086 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +125,7 @@
 			);
 			name = "finanzas-personales-app";
 			packageProductDependencies = (
+				16A6E5C22E6386D600A5F086 /* Supabase */,
 			);
 			productName = "finanzas-personales-app";
 			productReference = 16A6E5772E6380DD00A5F086 /* finanzas-personales-app.app */;
@@ -195,6 +209,10 @@
 			);
 			mainGroup = 16A6E56E2E6380DD00A5F086;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				16A6E5BF2E6384B300A5F086 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				16A6E5C02E6384E900A5F086 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 16A6E5782E6380DD00A5F086 /* Products */;
 			projectDirPath = "";
@@ -558,6 +576,33 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		16A6E5BF2E6384B300A5F086 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
+		16A6E5C02E6384E900A5F086 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		16A6E5C22E6386D600A5F086 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 16A6E5C02E6384E900A5F086 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 16A6E56F2E6380DD00A5F086 /* Project object */;
 }
