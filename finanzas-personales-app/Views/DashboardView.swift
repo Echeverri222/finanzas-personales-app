@@ -44,9 +44,7 @@ struct DashboardView: View {
             .navigationTitle("Dashboard")
             .navigationBarTitleDisplayMode(.large)
             .refreshable {
-                if authService.isDemoMode {
-                    await movementViewModel.loadData(isDemoMode: true)
-                } else if let userProfile = authService.userProfile {
+                if let userProfile = authService.userProfile {
                     await movementViewModel.loadData(userId: userProfile.id)
                 }
             }

@@ -128,22 +128,9 @@ class MovementViewModel: ObservableObject {
     
     // MARK: - Data Loading
     
-    func loadData(userId: String? = nil, isDemoMode: Bool = false) async {
+    func loadData(userId: String) async {
         loading = true
         errorMessage = ""
-        
-        if isDemoMode {
-            // Load demo data for testing
-            loadDemoData()
-            loading = false
-            return
-        }
-        
-        guard let userId = userId else {
-            errorMessage = "ID de usuario requerido"
-            loading = false
-            return
-        }
         
         do {
             print("📊 DEBUG: Cargando datos para usuario ID: \(userId)")
@@ -167,71 +154,7 @@ class MovementViewModel: ObservableObject {
         loading = false
     }
     
-    private func loadDemoData() {
-        // Create demo movement types
-        let demoTypes = [
-            MovementType(id: "1", nombre: "Ingresos", meta: 5000, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: "2", nombre: "Alimentacion", meta: 800, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: "3", nombre: "Transporte", meta: 300, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: "4", nombre: "Compras", meta: 400, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: "5", nombre: "Gastos fijos", meta: 1200, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: "6", nombre: "Ahorro", meta: 1000, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: "7", nombre: "Salidas", meta: 200, usuarioId: "demo", createdAt: Date())
-        ]
-        
-        // Create demo movements
-        let calendar = Calendar.current
-        let today = Date()
-        var demoMovements: [Movement] = []
-        
-        // Generate movements for the last 3 months
-        for monthOffset in 0..<3 {
-            guard let monthDate = calendar.date(byAdding: .month, value: -monthOffset, to: today) else { continue }
-            
-            // Income
-            var income = Movement(
-                id: String(demoMovements.count + 1),
-                nombre: "Salario Mensual",
-                importe: 4500,
-                fecha: calendar.date(byAdding: .day, value: -5, to: monthDate) ?? monthDate,
-                descripcion: "Salario del mes",
-                idTipoMovimiento: "1",
-                usuarioId: "demo",
-                createdAt: monthDate
-            )
-            income.tipoNombre = "Ingresos"
-            demoMovements.append(income)
-            
-            // Expenses
-            let expenses = [
-                ("Supermercado", 200.0, 2, "Alimentacion"),
-                ("Gasolina", 80.0, 3, "Transporte"),
-                ("Renta", 1000.0, 5, "Gastos fijos"),
-                ("Servicios", 150.0, 5, "Gastos fijos"),
-                ("Ropa", 120.0, 4, "Compras"),
-                ("Cine", 40.0, 7, "Salidas"),
-                ("Ahorro mensual", 800.0, 6, "Ahorro")
-            ]
-            
-            for (index, (name, amount, typeId, typeName)) in expenses.enumerated() {
-                var movement = Movement(
-                    id: String(demoMovements.count + 1),
-                    nombre: name,
-                    importe: amount,
-                    fecha: calendar.date(byAdding: .day, value: -(10 + index * 2), to: monthDate) ?? monthDate,
-                    descripcion: "Demo transaction",
-                    idTipoMovimiento: String(typeId),
-                    usuarioId: "demo",
-                    createdAt: monthDate
-                )
-                movement.tipoNombre = typeName
-                demoMovements.append(movement)
-            }
-        }
-        
-        movementTypes = demoTypes
-        movements = demoMovements.sorted { $0.fecha > $1.fecha }
-    }
+
     
     func addMovement(_ movement: Movement) async {
         errorMessage = "" // Clear any previous error

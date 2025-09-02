@@ -36,54 +36,15 @@ struct AuthView: View {
                 
                 // Login Options
                     
-                VStack(spacing: 20) {
-                    // Google Sign In Button
-                    GoogleSignInButton(
-                        action: {
-                            Task {
-                                await authService.signInWithGoogle()
-                            }
-                        },
-                        isLoading: authService.loading
-                    )
-                    
-                    // Divider
-                    HStack {
-                        Rectangle()
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(height: 1)
-                        
-                        Text("O")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .padding(.horizontal, 16)
-                        
-                        Rectangle()
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(height: 1)
-                    }
-                    
-                    // Demo Mode Button
-                    Button(action: {
+                // Google Sign In Button
+                GoogleSignInButton(
+                    action: {
                         Task {
-                            await authService.signInDemo()
+                            await authService.signInWithGoogle()
                         }
-                    }) {
-                        HStack(spacing: 12) {
-                            Image(systemName: "person.crop.circle.fill")
-                                .foregroundColor(.white)
-                            Text("Modo Demo (Solo Testing)")
-                                .fontWeight(.medium)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
-                        .padding(.horizontal)
-                        .background(Color.orange)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                    }
-                    .disabled(authService.loading)
-                }
+                    },
+                    isLoading: authService.loading
+                )
                 .padding(.horizontal)
                 
                 // Messages

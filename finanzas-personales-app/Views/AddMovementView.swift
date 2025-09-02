@@ -141,19 +141,6 @@ struct AddMovementView: View {
         isLoading = true
         errorMessage = ""
         
-        // Check if we're in demo mode
-        if authService.isDemoMode {
-            // In demo mode, just show success and dismiss
-            Task {
-                try? await Task.sleep(for: .seconds(1))
-                await MainActor.run {
-                    isLoading = false
-                    dismiss()
-                }
-            }
-            return
-        }
-        
         guard let userProfile = authService.userProfile else {
             errorMessage = "Error: Usuario no autenticado"
             isLoading = false

@@ -40,23 +40,43 @@ class AuthService: ObservableObject {
             switch event {
             case .signedIn:
                 if let session = session {
-                    isAuthenticated = true
-                    currentUser = session.user
-                    print("🔐 DEBUG: Usuario autenticado con ID: \(session.user.id)")
-                    print("🔐 DEBUG: Email del usuario: \(session.user.email ?? "No email")")
+                    print("🔐 DEBUG: Evento signedIn - Verificando userProfile...")
                     
-                    // Fetch or create user profile
+                    // Only mark as authenticated after successfully fetching userProfile
                     Task {
-                        await fetchUserProfile(authUser: session.user)
+                        do {
+                            let usuario = try await userService.fetchOrCreateUserProfile(
+                                authUserId: session.user.id.uuidString,
+                                email: session.user.email,
+                                name: nil
+                            )
+                            
+                            await MainActor.run {
+                                isAuthenticated = true
+                                currentUser = session.user
+                                userProfile = usuario
+                                print("✅ DEBUG: SignIn exitoso - DB ID: \(usuario.id)")
+                            }
+                        } catch {
+                            await MainActor.run {
+                                isAuthenticated = false
+                                currentUser = nil
+                                userProfile = nil
+                                errorMessage = "Error validando usuario: \(error.localizedDescription)"
+                                print("❌ DEBUG: Error en signIn: \(error)")
+                            }
+                        }
                     }
                 }
             case .signedOut:
                 isAuthenticated = false
                 currentUser = nil
                 userProfile = nil
+                print("🚪 DEBUG: Usuario desconectado")
             case .tokenRefreshed:
                 if let session = session {
                     currentUser = session.user
+                    print("🔄 DEBUG: Token refrescado")
                 }
             default:
                 break
@@ -67,16 +87,40 @@ class AuthService: ObservableObject {
     private func checkInitialAuthState() async {
         do {
             let session = try await supabase.auth.session
-            await MainActor.run {
-                isAuthenticated = session.user != nil
-                currentUser = session.user
+            print("🔐 DEBUG: Sesión encontrada, verificando validez...")
+            
+            // Try to fetch user profile to validate session
+            do {
+                let usuario = try await userService.fetchOrCreateUserProfile(
+                    authUserId: session.user.id.uuidString,
+                    email: session.user.email,
+                    name: nil
+                )
+                
+                // Only mark as authenticated if we have both session AND valid userProfile
+                await MainActor.run {
+                    isAuthenticated = true
+                    currentUser = session.user
+                    userProfile = usuario
+                    print("✅ DEBUG: Sesión válida - Usuario autenticado con DB ID: \(usuario.id)")
+                }
+            } catch {
+                // Session exists but userProfile failed - force login
+                print("❌ DEBUG: Sesión inválida o userProfile falló: \(error)")
+                await MainActor.run {
+                    isAuthenticated = false
+                    currentUser = nil
+                    userProfile = nil
+                    print("🚪 DEBUG: Redirigiendo a login...")
+                }
             }
         } catch {
-            print("Error checking auth state: \(error)")
+            print("❌ DEBUG: No hay sesión válida: \(error)")
             await MainActor.run {
                 isAuthenticated = false
                 currentUser = nil
                 userProfile = nil
+                print("🚪 DEBUG: Mostrando login...")
             }
         }
     }
@@ -129,49 +173,9 @@ class AuthService: ObservableObject {
         }
     }
     
-    // MARK: - Demo Mode for Development
+
     
-    func signInDemo() async {
-        await MainActor.run {
-            loading = true
-            errorMessage = ""
-        }
-        
-        // Create a demo user session
-        await MainActor.run {
-            isAuthenticated = true
-            // Create a fake user for demo purposes
-            currentUser = nil // We'll handle this differently
-            errorMessage = "¡Sesión demo iniciada! Todas las funciones están disponibles."
-            loading = false
-        }
-    }
-    
-    var isDemoMode: Bool {
-        return isAuthenticated && userProfile == nil
-    }
-    
-    // MARK: - User Profile Management
-    
-    private func fetchUserProfile(authUser: User) async {
-        do {
-            let usuario = try await userService.fetchOrCreateUserProfile(
-                authUserId: authUser.id.uuidString,
-                email: authUser.email,
-                name: nil // Don't try to extract name from metadata for now
-            )
-            
-            await MainActor.run {
-                userProfile = usuario
-                print("👤 DEBUG: Perfil de usuario cargado - DB ID: \(usuario.id)")
-            }
-        } catch {
-            await MainActor.run {
-                errorMessage = "Error cargando perfil de usuario: \(error.localizedDescription)"
-                print("❌ DEBUG: Error cargando perfil: \(error)")
-            }
-        }
-    }
+
     
     func signOut() async {
         do {

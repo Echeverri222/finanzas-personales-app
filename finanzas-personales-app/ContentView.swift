@@ -17,10 +17,7 @@ struct ContentView: View {
                 MainTabView()
                                     .onAppear {
                     Task {
-                        if authService.isDemoMode {
-                            print("🎯 DEBUG: Cargando en modo demo")
-                            await movementViewModel.loadData(isDemoMode: true)
-                        } else if let userProfile = authService.userProfile {
+                        if let userProfile = authService.userProfile {
                             print("🎯 DEBUG: Cargando datos para usuario DB ID: \(userProfile.id)")
                             await movementViewModel.loadData(userId: userProfile.id)
                         } else {

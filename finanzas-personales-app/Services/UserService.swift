@@ -23,18 +23,42 @@ class UserService {
         // First try to fetch existing user
         do {
             print("👤 DEBUG: Query usuarios con user_id: \(authUserId)")
-            let usuario: Usuario = try await supabase
+            print("👤 DEBUG: Ejecutando consulta...")
+            
+            let usuarios: [Usuario] = try await supabase
                 .from("usuarios")
                 .select()
                 .eq("user_id", value: authUserId)
-                .single()
                 .execute()
                 .value
             
-            print("👤 DEBUG: Usuario encontrado con DB ID: \(usuario.id)")
-            return usuario
+            print("👤 DEBUG: Consulta exitosa! Usuarios encontrados: \(usuarios.count)")
+            
+            if let usuario = usuarios.first {
+                print("👤 DEBUG: Usuario encontrado con DB ID: \(usuario.id)")
+                return usuario
+            } else {
+                print("👤 DEBUG: Array vacío, usuario no existe en la base de datos")
+                throw NSError(domain: "UserNotFound", code: 404, userInfo: [NSLocalizedDescriptionKey: "Usuario no encontrado"])
+            }
         } catch {
-            print("👤 DEBUG: Error en búsqueda: \(error)")
+            print("❌ DEBUG: Error detallado en búsqueda: \(error)")
+            print("❌ DEBUG: Error localizado: \(error.localizedDescription)")
+            print("❌ DEBUG: Tipo de error: \(type(of: error))")
+            
+            // Verificar si es error de tabla no encontrada
+            if error.localizedDescription.contains("relation") || error.localizedDescription.contains("table") {
+                print("❌ DEBUG: ¡TABLA 'usuarios' NO EXISTE en Supabase!")
+            }
+            
+            // Verificar si es error de permisos
+            if error.localizedDescription.contains("permission") || error.localizedDescription.contains("policy") {
+                print("❌ DEBUG: ¡ERROR DE PERMISOS RLS en tabla 'usuarios'!")
+            }
+            
+            if let decodingError = error as? DecodingError {
+                print("❌ DEBUG: DecodingError específico: \(decodingError)")
+            }
             print("👤 DEBUG: Usuario no encontrado, creando nuevo...")
             
             // User doesn't exist, create new profile

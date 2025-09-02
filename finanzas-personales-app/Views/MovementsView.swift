@@ -53,9 +53,7 @@ struct MovementsView: View {
                 EditMovementView(movement: movement)
             }
             .refreshable {
-                if authService.isDemoMode {
-                    await movementViewModel.loadData(isDemoMode: true)
-                } else if let userProfile = authService.userProfile {
+                if let userProfile = authService.userProfile {
                     await movementViewModel.loadData(userId: userProfile.id)
                 }
             }
@@ -201,11 +199,6 @@ struct MovementsView: View {
     }
     
     private func deleteMovement(_ movement: Movement) {
-        if authService.isDemoMode {
-            // In demo mode, just show success
-            return
-        }
-        
         guard let userProfile = authService.userProfile else { return }
         
         Task {

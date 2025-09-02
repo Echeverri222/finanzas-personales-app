@@ -68,11 +68,11 @@ struct SettingsView: View {
                     }
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(authService.isDemoMode ? "Usuario Demo" : (authService.currentUser?.email ?? "Usuario"))
+                    Text(authService.currentUser?.email ?? "Usuario")
                         .font(.headline)
                         .fontWeight(.medium)
                     
-                    Text(authService.isDemoMode ? "Sesión de prueba" : "Cuenta activa")
+                    Text("Cuenta activa")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -180,9 +180,7 @@ struct SettingsView: View {
     
     private func refreshData() {
         Task {
-            if authService.isDemoMode {
-                await movementViewModel.loadData(isDemoMode: true)
-            } else if let userProfile = authService.userProfile {
+            if let userProfile = authService.userProfile {
                 await movementViewModel.loadData(userId: userProfile.id)
             }
         }
