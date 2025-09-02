@@ -50,7 +50,7 @@ struct AddMovementView: View {
                         ForEach(movementViewModel.movementTypes, id: \.self) { type in
                             HStack {
                                 Image(systemName: type.categoryIcon)
-                                    .foregroundColor(Color(type.categoryColor))
+                                    .foregroundColor(type.categoryColor)
                                 Text(type.nombre)
                             }
                             .tag(Optional(type))
@@ -67,9 +67,14 @@ struct AddMovementView: View {
                 
                 if !errorMessage.isEmpty {
                     Section {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .font(.caption)
+                        HStack {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.red)
+                            Text(errorMessage)
+                                .foregroundColor(.red)
+                        }
+                        .font(.caption)
+                        .padding(.vertical, 4)
                     }
                 }
             }
@@ -87,6 +92,11 @@ struct AddMovementView: View {
                         saveMovement()
                     }
                     .disabled(!isFormValid || isLoading)
+                    .overlay(
+                        ProgressView()
+                            .scaleEffect(0.8)
+                            .opacity(isLoading ? 1 : 0)
+                    )
                 }
             }
             .onAppear {
@@ -156,7 +166,7 @@ struct AddMovementView: View {
             fecha: date,
             descripcion: description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : description.trimmingCharacters(in: .whitespacesAndNewlines),
             idTipoMovimiento: typeId,
-            usuarioId: String(userProfile.id)
+            usuarioId: userProfile.id
         )
         
         Task {
@@ -165,8 +175,10 @@ struct AddMovementView: View {
             await MainActor.run {
                 isLoading = false
                 if movementViewModel.errorMessage.isEmpty {
+                    // Success - close the form
                     dismiss()
                 } else {
+                    // Show error message
                     errorMessage = movementViewModel.errorMessage
                 }
             }
@@ -221,7 +233,7 @@ struct EditMovementView: View {
                         ForEach(movementViewModel.movementTypes, id: \.self) { type in
                             HStack {
                                 Image(systemName: type.categoryIcon)
-                                    .foregroundColor(Color(type.categoryColor))
+                                    .foregroundColor(type.categoryColor)
                                 Text(type.nombre)
                             }
                             .tag(Optional(type))
@@ -238,9 +250,14 @@ struct EditMovementView: View {
                 
                 if !errorMessage.isEmpty {
                     Section {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .font(.caption)
+                        HStack {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.red)
+                            Text(errorMessage)
+                                .foregroundColor(.red)
+                        }
+                        .font(.caption)
+                        .padding(.vertical, 4)
                     }
                 }
             }
@@ -297,7 +314,7 @@ struct EditMovementView: View {
             fecha: date,
             descripcion: description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : description.trimmingCharacters(in: .whitespacesAndNewlines),
             idTipoMovimiento: typeId,
-            usuarioId: String(userProfile.id),
+            usuarioId: userProfile.id,
             createdAt: movement.createdAt
         )
         

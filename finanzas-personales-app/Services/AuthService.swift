@@ -54,7 +54,6 @@ class AuthService: ObservableObject {
                 isAuthenticated = false
                 currentUser = nil
                 userProfile = nil
-                userProfile = nil
             case .tokenRefreshed:
                 if let session = session {
                     currentUser = session.user
@@ -149,7 +148,7 @@ class AuthService: ObservableObject {
     }
     
     var isDemoMode: Bool {
-        return isAuthenticated && (currentUser == nil)
+        return isAuthenticated && userProfile == nil
     }
     
     // MARK: - User Profile Management
@@ -159,7 +158,7 @@ class AuthService: ObservableObject {
             let usuario = try await userService.fetchOrCreateUserProfile(
                 authUserId: authUser.id.uuidString,
                 email: authUser.email,
-                name: authUser.userMetadata["name"] as? String
+                name: nil // Don't try to extract name from metadata for now
             )
             
             await MainActor.run {

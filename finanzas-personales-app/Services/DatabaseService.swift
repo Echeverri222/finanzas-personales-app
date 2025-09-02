@@ -16,7 +16,7 @@ class DatabaseService {
     
     // MARK: - Movement Types
     
-    func fetchMovementTypes(for userId: Int) async throws -> [MovementType] {
+    func fetchMovementTypes(for userId: String) async throws -> [MovementType] {
         let response: [MovementType] = try await supabase
             .from("tipo_movimiento")
             .select()
@@ -42,7 +42,7 @@ class DatabaseService {
     
     // MARK: - Movements
     
-    func fetchMovements(for userId: Int) async throws -> [Movement] {
+    func fetchMovements(for userId: String) async throws -> [Movement] {
         // First get the movement types
         let movementTypes = try await fetchMovementTypes(for: userId)
         
@@ -96,7 +96,7 @@ class DatabaseService {
         return response
     }
     
-    func deleteMovement(id: Int, userId: String) async throws {
+    func deleteMovement(id: String, userId: String) async throws {
         try await supabase
             .from("movimientos")
             .delete()

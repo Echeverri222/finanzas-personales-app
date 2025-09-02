@@ -22,9 +22,18 @@ struct ContentView: View {
                             await movementViewModel.loadData(isDemoMode: true)
                         } else if let userProfile = authService.userProfile {
                             print("🎯 DEBUG: Cargando datos para usuario DB ID: \(userProfile.id)")
-                            await movementViewModel.loadData(userId: String(userProfile.id))
+                            await movementViewModel.loadData(userId: userProfile.id)
                         } else {
                             print("❌ DEBUG: No hay usuario disponible para cargar datos")
+                        }
+                    }
+                }
+                .onChange(of: authService.userProfile) { oldValue, newValue in
+                    // Reload data whenever userProfile changes (gets loaded)
+                    Task {
+                        if let userProfile = newValue {
+                            print("🎯 DEBUG: Usuario cargado, recargando datos para DB ID: \(userProfile.id)")
+                            await movementViewModel.loadData(userId: userProfile.id)
                         }
                     }
                 }

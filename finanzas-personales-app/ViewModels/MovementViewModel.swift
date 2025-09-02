@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Combine
 
 @MainActor
@@ -89,7 +90,7 @@ class MovementViewModel: ObservableObject {
         
         return grouped.compactMap { (category, movements) in
             let total = movements.reduce(0) { $0 + $1.importe }
-            let color = movements.first?.categoryColor ?? "gray"
+            let color = movements.first?.categoryColor ?? .gray
             return CategoryExpense(name: category, amount: total, color: color)
         }.sorted { $0.amount > $1.amount }
     }
@@ -147,15 +148,9 @@ class MovementViewModel: ObservableObject {
         do {
             print("📊 DEBUG: Cargando datos para usuario ID: \(userId)")
             
-            // Convert String to Int for database queries (usuarios.id is Int)
-            guard let userIdInt = Int(userId) else {
-                errorMessage = "ID de usuario inválido"
-                loading = false
-                return
-            }
-            
-            async let movementsTask = databaseService.fetchMovements(for: userIdInt)
-            async let typesTask = databaseService.fetchMovementTypes(for: userIdInt)
+            // Use String directly (usuarios.id is String UUID)
+            async let movementsTask = databaseService.fetchMovements(for: userId)
+            async let typesTask = databaseService.fetchMovementTypes(for: userId)
             
             let (fetchedMovements, fetchedTypes) = try await (movementsTask, typesTask)
             
@@ -175,13 +170,13 @@ class MovementViewModel: ObservableObject {
     private func loadDemoData() {
         // Create demo movement types
         let demoTypes = [
-            MovementType(id: 1, nombre: "Ingresos", meta: 5000, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: 2, nombre: "Alimentacion", meta: 800, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: 3, nombre: "Transporte", meta: 300, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: 4, nombre: "Compras", meta: 400, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: 5, nombre: "Gastos fijos", meta: 1200, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: 6, nombre: "Ahorro", meta: 1000, usuarioId: "demo", createdAt: Date()),
-            MovementType(id: 7, nombre: "Salidas", meta: 200, usuarioId: "demo", createdAt: Date())
+            MovementType(id: "1", nombre: "Ingresos", meta: 5000, usuarioId: "demo", createdAt: Date()),
+            MovementType(id: "2", nombre: "Alimentacion", meta: 800, usuarioId: "demo", createdAt: Date()),
+            MovementType(id: "3", nombre: "Transporte", meta: 300, usuarioId: "demo", createdAt: Date()),
+            MovementType(id: "4", nombre: "Compras", meta: 400, usuarioId: "demo", createdAt: Date()),
+            MovementType(id: "5", nombre: "Gastos fijos", meta: 1200, usuarioId: "demo", createdAt: Date()),
+            MovementType(id: "6", nombre: "Ahorro", meta: 1000, usuarioId: "demo", createdAt: Date()),
+            MovementType(id: "7", nombre: "Salidas", meta: 200, usuarioId: "demo", createdAt: Date())
         ]
         
         // Create demo movements
@@ -195,12 +190,12 @@ class MovementViewModel: ObservableObject {
             
             // Income
             var income = Movement(
-                id: demoMovements.count + 1,
+                id: String(demoMovements.count + 1),
                 nombre: "Salario Mensual",
                 importe: 4500,
                 fecha: calendar.date(byAdding: .day, value: -5, to: monthDate) ?? monthDate,
                 descripcion: "Salario del mes",
-                idTipoMovimiento: 1,
+                idTipoMovimiento: "1",
                 usuarioId: "demo",
                 createdAt: monthDate
             )
@@ -220,12 +215,12 @@ class MovementViewModel: ObservableObject {
             
             for (index, (name, amount, typeId, typeName)) in expenses.enumerated() {
                 var movement = Movement(
-                    id: demoMovements.count + 1,
+                    id: String(demoMovements.count + 1),
                     nombre: name,
                     importe: amount,
                     fecha: calendar.date(byAdding: .day, value: -(10 + index * 2), to: monthDate) ?? monthDate,
                     descripcion: "Demo transaction",
-                    idTipoMovimiento: typeId,
+                    idTipoMovimiento: String(typeId),
                     usuarioId: "demo",
                     createdAt: monthDate
                 )
@@ -239,6 +234,7 @@ class MovementViewModel: ObservableObject {
     }
     
     func addMovement(_ movement: Movement) async {
+        errorMessage = "" // Clear any previous error
         do {
             let newMovement = try await databaseService.createMovement(movement)
             movements.insert(newMovement, at: 0)
@@ -248,6 +244,7 @@ class MovementViewModel: ObservableObject {
     }
     
     func updateMovement(_ movement: Movement) async {
+        errorMessage = "" // Clear any previous error
         do {
             let updatedMovement = try await databaseService.updateMovement(movement)
             if let index = movements.firstIndex(where: { $0.id == movement.id }) {
@@ -261,6 +258,7 @@ class MovementViewModel: ObservableObject {
     func deleteMovement(_ movement: Movement, userId: String) async {
         guard let id = movement.id else { return }
         
+        errorMessage = "" // Clear any previous error
         do {
             try await databaseService.deleteMovement(id: id, userId: userId)
             movements.removeAll { $0.id == id }
@@ -291,7 +289,7 @@ struct CategoryExpense: Identifiable {
     let id = UUID()
     let name: String
     let amount: Double
-    let color: String
+    let color: Color
 }
 
 struct MonthlyData: Identifiable {

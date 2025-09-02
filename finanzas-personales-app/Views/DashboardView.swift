@@ -15,24 +15,34 @@ struct DashboardView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                LazyVStack(spacing: 20) {
-                    // Header with filters
-                    headerSection
-                    
-                    // Stats cards
-                    statsCardsSection
-                    
-                    // Quick actions
-                    quickActionsSection
-                    
-                    // Charts section
-                    chartsSection
-                    
-                    // Recent movements
-                    recentMovementsSection
+            ZStack {
+                // Background with subtle gradient
+                LinearGradient(
+                    colors: [Color(.systemBackground), Color(.systemGray6)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                ScrollView {
+                    LazyVStack(spacing: 20) {
+                        // Header with filters
+                        headerSection
+                        
+                        // Stats cards
+                        statsCardsSection
+                        
+                        // Quick actions
+                        quickActionsSection
+                        
+                        // Charts section
+                        chartsSection
+                        
+                        // Recent movements
+                        recentMovementsSection
+                    }
+                    .padding()
                 }
-                .padding()
             }
             .navigationTitle("Dashboard")
             .navigationBarTitleDisplayMode(.large)
@@ -40,7 +50,7 @@ struct DashboardView: View {
                 if authService.isDemoMode {
                     await movementViewModel.loadData(isDemoMode: true)
                 } else if let userProfile = authService.userProfile {
-                    await movementViewModel.loadData(userId: String(userProfile.id))
+                    await movementViewModel.loadData(userId: userProfile.id)
                 }
             }
             .sheet(isPresented: $showingAddMovement) {
@@ -318,39 +328,60 @@ struct StatsCard: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(spacing: 0) {
+            // Top section with title and add button
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.caption)
+                        .fontWeight(.medium)
                         .foregroundColor(.secondary)
                     
                     Text(formatCurrency(amount))
-                        .font(.title3)
+                        .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundColor(color)
+                        .foregroundColor(.primary)
+                        .minimumScaleFactor(0.8)
                 }
                 
                 Spacer()
                 
                 if showAddButton, let action = action {
                     Button(action: action) {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
                             .font(.title2)
                             .foregroundColor(color)
+                            .background(Color.white)
+                            .clipShape(Circle())
                     }
+                    .buttonStyle(.plain)
                 }
             }
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 8)
             
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundColor(color)
-                .opacity(0.3)
+            // Bottom section with icon
+            HStack {
+                Spacer()
+                Image(systemName: icon)
+                    .font(.system(size: 28))
+                    .foregroundColor(color)
+                    .opacity(0.2)
+                    .padding(.bottom, 12)
+                    .padding(.trailing, 12)
+            }
         }
-        .padding()
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+        .frame(minHeight: 100)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(UIColor.secondarySystemBackground))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(color.opacity(0.1), lineWidth: 1)
+                )
+        )
+        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -386,9 +417,9 @@ struct MovementRowView: View {
         HStack(spacing: 12) {
             Image(systemName: movement.categoryIcon)
                 .font(.title2)
-                .foregroundColor(Color(movement.categoryColor))
+                .foregroundColor(movement.categoryColor)
                 .frame(width: 40, height: 40)
-                .background(Color(movement.categoryColor).opacity(0.1))
+                .background(movement.categoryColor.opacity(0.1))
                 .cornerRadius(20)
             
             VStack(alignment: .leading, spacing: 2) {
@@ -433,32 +464,51 @@ struct CategoryExpenseChart: View {
                 .fontWeight(.medium)
                 .padding(.horizontal)
             
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(expenses.prefix(5)) { expense in
-                        VStack(spacing: 8) {
-                            VStack(spacing: 2) {
-                                Text(formatCurrency(expense.amount))
-                                    .font(.caption)
-                                    .fontWeight(.medium)
+            if expenses.isEmpty {
+                Text("No hay datos de gastos disponibles")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding()
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 16) {
+                        ForEach(expenses.prefix(5)) { expense in
+                            VStack(spacing: 8) {
+                                VStack(spacing: 4) {
+                                    Text(formatCurrency(expense.amount))
+                                        .font(.caption)
+                                        .fontWeight(.medium)
+                                        .foregroundColor(.primary)
+                                    
+                                    // Improved bar height calculation
+                                    let maxAmount = expenses.first?.amount ?? 1.0
+                                    let heightRatio = maxAmount > 0 ? (expense.amount / maxAmount) : 0
+                                    let barHeight = max(20, heightRatio * 80)
+                                    
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .fill(expense.color)
+                                        .frame(width: 50, height: barHeight)
+                                        .animation(.easeInOut(duration: 0.6), value: barHeight)
+                                }
                                 
-                                RoundedRectangle(cornerRadius: 4)
-                                    .fill(Color(expense.color))
-                                    .frame(width: 60, height: max(4, min(100, expense.amount / expenses.first!.amount * 100)))
+                                Text(expense.name)
+                                    .font(.caption2)
+                                    .fontWeight(.medium)
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(2)
+                                    .frame(width: 60)
+                                    .foregroundColor(.secondary)
                             }
-                            
-                            Text(expense.name)
-                                .font(.caption2)
-                                .multilineTextAlignment(.center)
-                                .lineLimit(2)
-                                .frame(width: 70)
                         }
                     }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
         }
         .padding(.vertical)
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+        .padding(.horizontal)
     }
 }
 

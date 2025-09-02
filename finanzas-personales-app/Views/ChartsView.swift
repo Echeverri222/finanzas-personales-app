@@ -135,7 +135,7 @@ struct ChartsView: View {
                             x: .value("Categoría", expense.name),
                             y: .value("Monto", expense.amount)
                         )
-                        .foregroundStyle(Color(expense.color))
+                        .foregroundStyle(expense.color)
                         .cornerRadius(4)
                     }
                 }

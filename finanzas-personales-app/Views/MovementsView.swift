@@ -56,7 +56,7 @@ struct MovementsView: View {
                 if authService.isDemoMode {
                     await movementViewModel.loadData(isDemoMode: true)
                 } else if let userProfile = authService.userProfile {
-                    await movementViewModel.loadData(userId: String(userProfile.id))
+                    await movementViewModel.loadData(userId: userProfile.id)
                 }
             }
         }
@@ -209,7 +209,7 @@ struct MovementsView: View {
         guard let userProfile = authService.userProfile else { return }
         
         Task {
-            await movementViewModel.deleteMovement(movement, userId: String(userProfile.id))
+            await movementViewModel.deleteMovement(movement, userId: userProfile.id)
         }
     }
     
@@ -232,9 +232,9 @@ struct MovementCard: View {
                 // Category icon
                 Image(systemName: movement.categoryIcon)
                     .font(.title2)
-                    .foregroundColor(Color(movement.categoryColor))
+                    .foregroundColor(movement.categoryColor)
                     .frame(width: 44, height: 44)
-                    .background(Color(movement.categoryColor).opacity(0.1))
+                    .background(movement.categoryColor.opacity(0.1))
                     .cornerRadius(22)
                 
                 // Movement details
@@ -355,9 +355,9 @@ struct FiltersView: View {
                 
                 Section("Categoría") {
                     Picker("Categoría", selection: Binding(
-                        get: { movementViewModel.selectedCategory?.id ?? 0 },
+                        get: { movementViewModel.selectedCategory?.id ?? "" },
                         set: { newValue in
-                            if newValue == 0 {
+                            if newValue.isEmpty {
                                 movementViewModel.setCategoryFilter(nil)
                             } else {
                                 let category = movementViewModel.movementTypes.first { $0.id == newValue }
@@ -365,7 +365,7 @@ struct FiltersView: View {
                             }
                         }
                     )) {
-                        Text("Todas las categorías").tag(0)
+                        Text("Todas las categorías").tag("")
                         ForEach(movementViewModel.movementTypes, id: \.self) { type in
                             if let id = type.id {
                                 Text(type.nombre).tag(id)
