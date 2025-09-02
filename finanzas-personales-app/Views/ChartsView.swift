@@ -43,7 +43,8 @@ struct ChartsView: View {
                 .font(.headline)
                 .fontWeight(.semibold)
             
-            HStack {
+            HStack(spacing: 12) {
+                // Year picker
                 Menu {
                     ForEach(movementViewModel.availableYears, id: \.self) { year in
                         Button("\(year)") {
@@ -55,11 +56,34 @@ struct ChartsView: View {
                         Text("\(movementViewModel.selectedYear)")
                         Image(systemName: "chevron.down")
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
                     .background(Color.blue.opacity(0.1))
                     .foregroundColor(.blue)
-                    .cornerRadius(10)
+                    .cornerRadius(8)
+                }
+                
+                // Month picker
+                Menu {
+                    Button("Todo el año") {
+                        movementViewModel.setMonthFilter(nil)
+                    }
+                    
+                    ForEach(1...12, id: \.self) { month in
+                        Button(monthName(for: month)) {
+                            movementViewModel.setMonthFilter(month)
+                        }
+                    }
+                } label: {
+                    HStack {
+                        Text(movementViewModel.selectedMonth != nil ? monthName(for: movementViewModel.selectedMonth!) : "Todo el año")
+                        Image(systemName: "chevron.down")
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.green.opacity(0.1))
+                    .foregroundColor(.green)
+                    .cornerRadius(8)
                 }
                 
                 Spacer()
@@ -292,9 +316,15 @@ struct ChartsView: View {
     private func formatCurrency(_ amount: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
+        formatter.currencySymbol = "$"
         formatter.maximumFractionDigits = 0
         return formatter.string(from: NSNumber(value: amount)) ?? "$0"
+    }
+    
+    private func monthName(for month: Int) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "es_ES")
+        return formatter.monthSymbols[month - 1]
     }
 }
 

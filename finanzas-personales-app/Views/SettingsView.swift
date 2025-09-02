@@ -136,19 +136,15 @@ struct SettingsView: View {
                 Label("Acerca de la app", systemImage: "info.circle")
             }
             
-            Link("Reportar problema", destination: URL(string: "mailto:support@finanzaspersonales.com")!)
-                .foregroundColor(.primary)
-                .overlay(alignment: .leading) {
-                    Label("", systemImage: "envelope")
-                        .foregroundColor(.blue)
-                }
+            Link(destination: URL(string: "mailto:support@finanzaspersonales.com")!) {
+                Label("Reportar problema", systemImage: "envelope")
+            }
+            .foregroundColor(.primary)
             
-            Link("Calificar la app", destination: URL(string: "https://apps.apple.com")!)
-                .foregroundColor(.primary)
-                .overlay(alignment: .leading) {
-                    Label("", systemImage: "star")
-                        .foregroundColor(.yellow)
-                }
+            Link(destination: URL(string: "https://apps.apple.com")!) {
+                Label("Calificar la app", systemImage: "star")
+            }
+            .foregroundColor(.primary)
         }
     }
     

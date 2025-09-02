@@ -32,9 +32,6 @@ struct DashboardView: View {
                         // Stats cards
                         statsCardsSection
                         
-                        // Quick actions
-                        quickActionsSection
-                        
                         // Charts section
                         chartsSection
                         
@@ -201,42 +198,7 @@ struct DashboardView: View {
         }
     }
     
-    private var quickActionsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Acciones rápidas")
-                .font(.headline)
-                .fontWeight(.semibold)
-            
-            HStack(spacing: 12) {
-                QuickActionButton(
-                    title: "Ingreso",
-                    icon: "plus.circle.fill",
-                    color: .green
-                ) {
-                    selectedMovementType = "income"
-                    showingAddMovement = true
-                }
-                
-                QuickActionButton(
-                    title: "Gasto",
-                    icon: "minus.circle.fill",
-                    color: .red
-                ) {
-                    selectedMovementType = "expense"
-                    showingAddMovement = true
-                }
-                
-                QuickActionButton(
-                    title: "Ahorro",
-                    icon: "banknote.fill",
-                    color: .blue
-                ) {
-                    selectedMovementType = "savings"
-                    showingAddMovement = true
-                }
-            }
-        }
-    }
+
     
     private var chartsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -385,30 +347,7 @@ struct StatsCard: View {
     }
 }
 
-struct QuickActionButton: View {
-    let title: String
-    let icon: String
-    let color: Color
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .foregroundColor(.white)
-                
-                Text(title)
-                    .font(.caption)
-                    .foregroundColor(.white)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(color)
-            .cornerRadius(12)
-        }
-    }
-}
+
 
 struct MovementRowView: View {
     let movement: Movement
@@ -517,7 +456,7 @@ struct CategoryExpenseChart: View {
 private func formatCurrency(_ amount: Double) -> String {
     let formatter = NumberFormatter()
     formatter.numberStyle = .currency
-    formatter.currencyCode = "USD"
+    formatter.currencySymbol = "$"
     formatter.maximumFractionDigits = 0
     return formatter.string(from: NSNumber(value: amount)) ?? "$0"
 }

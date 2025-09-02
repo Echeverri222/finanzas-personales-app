@@ -103,7 +103,7 @@ struct Movement: Identifiable, Codable, Hashable {
     var formattedAmount: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
+        formatter.currencySymbol = "$"
         formatter.maximumFractionDigits = 0
         return formatter.string(from: NSNumber(value: importe)) ?? "$0"
     }
