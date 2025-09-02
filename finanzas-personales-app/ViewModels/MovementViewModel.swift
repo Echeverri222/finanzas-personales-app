@@ -236,7 +236,14 @@ class MovementViewModel: ObservableObject {
     func addMovement(_ movement: Movement) async {
         errorMessage = "" // Clear any previous error
         do {
-            let newMovement = try await databaseService.createMovement(movement)
+            var newMovement = try await databaseService.createMovement(movement)
+            
+            // Manually assign the tipo information based on the loaded movement types
+            if let tipo = movementTypes.first(where: { $0.id == newMovement.idTipoMovimiento }) {
+                newMovement.tipoNombre = tipo.nombre
+                newMovement.tipoMeta = tipo.meta
+            }
+            
             movements.insert(newMovement, at: 0)
         } catch {
             errorMessage = "Error adding movement: \(error.localizedDescription)"
@@ -246,7 +253,14 @@ class MovementViewModel: ObservableObject {
     func updateMovement(_ movement: Movement) async {
         errorMessage = "" // Clear any previous error
         do {
-            let updatedMovement = try await databaseService.updateMovement(movement)
+            var updatedMovement = try await databaseService.updateMovement(movement)
+            
+            // Manually assign the tipo information based on the loaded movement types
+            if let tipo = movementTypes.first(where: { $0.id == updatedMovement.idTipoMovimiento }) {
+                updatedMovement.tipoNombre = tipo.nombre
+                updatedMovement.tipoMeta = tipo.meta
+            }
+            
             if let index = movements.firstIndex(where: { $0.id == movement.id }) {
                 movements[index] = updatedMovement
             }
