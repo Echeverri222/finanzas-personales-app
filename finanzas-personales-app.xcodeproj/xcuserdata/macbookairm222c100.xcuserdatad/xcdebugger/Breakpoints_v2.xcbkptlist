@@ -20,20 +20,6 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "581E572A-95DC-4D0E-867C-59822C529EC1 - f7aeeded120f1d30"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for closure #1 @Swift.MainActor () async -&gt; () in finanzas_personales_app.AuthService.handleAuthStateChange(event: Auth.AuthChangeEvent, session: Swift.Optional&lt;Auth.Session&gt;) -&gt; ()"
-                  moduleName = "finanzas-personales-app.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbookairm222c100/Desktop/Cursor/react_app/finanzas-personales-app/finanzas-personales-app/Services/AuthService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "61"
-                  endingLineNumber = "61">
-               </Location>
-               <Location
                   uuid = "581E572A-95DC-4D0E-867C-59822C529EC1 - 2880aff90b9fd02b"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
